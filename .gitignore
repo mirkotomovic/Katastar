@@ -1,2 +1,6 @@
 .vscode/
 katastar_venv/
+captcha/
+data/PDF_downloads/
+geckodriver.log
+__pycache__/
