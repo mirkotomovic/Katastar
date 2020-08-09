@@ -45,8 +45,6 @@ def saveCaptcha(url, name):
         f.write(response.data)
 
 
-# soup = BeautifulSoup(open("test.html"), "html.parser")
-
 # Json object one
 def getPodatciNepokretnosti(soup):
     return {
@@ -468,7 +466,7 @@ def getAllData(soup):
 
 
 def stripLinks(soup):
-    baseUrl = "katastar.rgz.gov.rs/eKatastarPublic/"
+    baseUrl = "http://katastar.rgz.gov.rs/eKatastarPublic/"
     setUrl = set()
     if soup.find("table", {"id": "ContentPlaceHolder1_GridView1"}):
         setUrl.update(
@@ -500,7 +498,7 @@ def stripLinks(soup):
                 if "nepID" in str(x)
             ]
         )
-    return setUrl, len(setUrl)
+    return setUrl
 
 
 # Helpers
