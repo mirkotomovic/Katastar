@@ -19,7 +19,7 @@ driver = webdriver.Firefox()  # Postavi na hradless kad se reši captcha
 data = {}
 # Za svaku katastarsku opštinu
 for starting_href in df["href"]:
-    for parcelaID in range(1, 5): 
+    for parcelaID in range(3, 5): 
         base_img_url = "https://katastar.rgz.gov.rs/eKatastarPublic/"
         # create a new Firefox session
         # options = Options()
@@ -32,7 +32,7 @@ for starting_href in df["href"]:
 
         inputElement = driver.find_element_by_id("ContentPlaceHolder1_txtBrParcele")
         inputElement.send_keys(parcelaID)
-        while True:
+        while len(driver.find_elements_by_id("ContentPlaceHolder1_btnSubmit")) == 1:
             time.sleep(8)
 
             # Ispod je deo vezan za captchu ovo sa fajlom je da bi ja mogau ručno da je rešim...
@@ -48,9 +48,6 @@ for starting_href in df["href"]:
             # captchaElement.send_keys(captcha_solution)
 
             driver.find_element_by_id("ContentPlaceHolder1_btnSubmit").click()
-
-            if len(driver.find_elements_by_id("ContentPlaceHolder1_GridView1_cmdSelect_0")) != 0:
-                break
 
         page = 2 # br prvog linka koji treba da klikne ukoliko link postoji
         grid = 1 # Br prve podparcele koju treba da klikne
