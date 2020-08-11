@@ -19,15 +19,13 @@ driver = webdriver.Firefox()  # Postavi na hradless kad se reši captcha
 data = {}
 # Za svaku katastarsku opštinu
 for starting_href in df["href"]:
-    for parcelaID in range(3, 5): 
+    for parcelaID in range(3, 5):
         base_img_url = "https://katastar.rgz.gov.rs/eKatastarPublic/"
         # create a new Firefox session
         # options = Options()
         # options.headless = True
 
         driver.get(base_img_url + starting_href)
-        html = driver.page_source
-        soup = BeautifulSoup(html, "html.parser")
         # Write parcela number
 
         inputElement = driver.find_element_by_id("ContentPlaceHolder1_txtBrParcele")
@@ -36,11 +34,10 @@ for starting_href in df["href"]:
             time.sleep(8)
 
             # Ispod je deo vezan za captchu ovo sa fajlom je da bi ja mogau ručno da je rešim...
-
-            captcha_img = soup.find(
-                "div", {"id": "ContentPlaceHolder1_UpdatePanel1"}
-            ).find("img")["src"]
-            saveCaptcha(base_img_url + captcha_img, "test_" + captcha_img + ".jpg")
+            captcha_img = driver.find_element_by_xpath(
+                "//div[3]/div[1]/table/tbody/tr[3]/td/div/span[1]/img"
+            ).get_attribute("src")
+            saveCaptcha(captcha_img, "test_" + str(parcelaID) + ".jpg")
 
             # captchaElement = driver.find_element_by_name(
             #     "ctl00$ContentPlaceHolder1$CaptchaControl"
@@ -49,8 +46,8 @@ for starting_href in df["href"]:
 
             driver.find_element_by_id("ContentPlaceHolder1_btnSubmit").click()
 
-        page = 2 # br prvog linka koji treba da klikne ukoliko link postoji
-        grid = 1 # Br prve podparcele koju treba da klikne
+        page = 2  # br prvog linka koji treba da klikne ukoliko link postoji
+        grid = 1  # Br prve podparcele koju treba da klikne
         urls = set()
         while True:
             while True:
