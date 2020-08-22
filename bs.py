@@ -41,8 +41,13 @@ def getKatOpstinas(soup):
 def saveCaptcha(url, name):
     with open("./captchas/" + name, "wb") as f:
         http = urllib3.PoolManager()
-        response = http.request("GET", url, timeout=2)
+        response = http.request("GET", url, timeout=10)
         f.write(response.data)
+
+def getCaptchaDataToSave(url):
+    http = urllib3.PoolManager()
+    response = http.request("GET", url, timeout=2)
+    return response.data
 
 
 # Json object one

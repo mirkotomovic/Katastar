@@ -2,11 +2,13 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup, SoupStrainer
 from bs import stripLinks, getAllData, saveCaptcha
+from captcha_solver import solveCaptcha
 import json
 import re
 import os
 import pandas as pd
 import time
+import sys
 
 df = pd.read_json("./data/katastarske_opstine.json")
 
@@ -17,9 +19,15 @@ df = df.transpose()
 driver = webdriver.Firefox()  # Postavi na hradless kad se reši captcha
 
 data = {}
+
+captchas_solved = 0
+captchas_successful = 0
+start_time = time.time();
+
+
 # Za svaku katastarsku opštinu
 for starting_href in df["href"]:
-    for parcelaID in range(3, 5):
+    for parcelaID in range(5, 105):
         base_img_url = "https://katastar.rgz.gov.rs/eKatastarPublic/"
         # create a new Firefox session
         # options = Options()
@@ -30,21 +38,27 @@ for starting_href in df["href"]:
 
         inputElement = driver.find_element_by_id("ContentPlaceHolder1_txtBrParcele")
         inputElement.send_keys(parcelaID)
+        
         while len(driver.find_elements_by_id("ContentPlaceHolder1_btnSubmit")) == 1:
-            time.sleep(8)
-
+            sys.stdout.write(f"\r {captchas_successful}/{captchas_solved}, Time:{time.time() - start_time}")
             # Ispod je deo vezan za captchu ovo sa fajlom je da bi ja mogau ručno da je rešim...
             captcha_img = driver.find_element_by_xpath(
                 "//div[3]/div[1]/table/tbody/tr[3]/td/div/span[1]/img"
             ).get_attribute("src")
-            saveCaptcha(captcha_img, "test_" + str(parcelaID) + ".jpg")
+            captcha_img_path = "test_" + str(parcelaID) + ".jpg"
 
-            # captchaElement = driver.find_element_by_name(
-            #     "ctl00$ContentPlaceHolder1$CaptchaControl"
-            # )
-            # captchaElement.send_keys(captcha_solution)
+            saveCaptcha(captcha_img, captcha_img_path)
 
+            captcha_solution = solveCaptcha(captcha_img_path)
+            captchas_solved += 1
+            captchaElement = driver.find_element_by_name(
+                "ctl00$ContentPlaceHolder1$CaptchaControl"
+            )
+            captchaElement.send_keys(captcha_solution)
+            time.sleep(4)
             driver.find_element_by_id("ContentPlaceHolder1_btnSubmit").click()
+
+        captchas_successful += 1
 
         page = 2  # br prvog linka koji treba da klikne ukoliko link postoji
         grid = 1  # Br prve podparcele koju treba da klikne
