@@ -22,7 +22,7 @@ data = {}
 
 captchas_solved = 0
 captchas_successful = 0
-start_time = time.time();
+start_time = time.time()
 
 
 # Za svaku katastarsku opštinu

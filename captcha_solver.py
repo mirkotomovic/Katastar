@@ -24,11 +24,11 @@ def solveCaptcha(image_path):
     img = np.pad(img, ((0, 3), (3, 3), (0, 0)), mode='constant', constant_values=255)
     # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     return chooseGuess([solveCaptcha0(img),
-             solveCaptcha1(img),
-              solveCaptcha2(img),
-              solveCaptcha3(img),
-              solveCaptcha4(img),
-              ])
+                        solveCaptcha1(img),
+                        solveCaptcha2(img),
+                        solveCaptcha3(img),
+                        solveCaptcha4(img),
+                    ])
 
 
 def chooseGuess(guess):
