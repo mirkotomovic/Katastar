@@ -12,11 +12,9 @@ import sys
 
 df = pd.read_json("./data/katastarske_opstine.json")
 
-# ovo je ok 150 KB tako da nebi trebalo da zajebava?
 df = df.transpose()
 
-# create a new Firefox session
-driver = webdriver.Firefox()  # Postavi na hradless kad se reši captcha
+driver = webdriver.Firefox()  
 
 data = {}
 
@@ -101,11 +99,9 @@ for starting_href, katOp in zip(df["href"], df["ImeKatOpstine"]):
         for href in urls:
             driver.get(href)
             # strainer = SoupStrainer("form")
-            # print(href)
             soup = BeautifulSoup(driver.page_source, "html.parser")
             data.update(getAllData(soup))
     with open("data/" + katOp + ".json", "w") as outfile:
         json.dump(data, outfile)
-
 
 driver.quit()
