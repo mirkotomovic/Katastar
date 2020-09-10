@@ -6,3 +6,5 @@ data/PDF_downloads/
 geckodriver.log
 __pycache__/
 test.json
+*.json
+result.jpg

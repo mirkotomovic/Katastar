@@ -24,10 +24,11 @@ captchas_solved = 0
 captchas_successful = 0
 start_time = time.time()
 
+skiped = 0
 
 # Za svaku katastarsku opštinu
-for starting_href in df["href"]:
-    for parcelaID in range(5, 105):
+for starting_href, katOp in zip(df["href"], df["ImeKatOpstine"]):
+    for parcelaID in range(0, 10000):
         base_img_url = "https://katastar.rgz.gov.rs/eKatastarPublic/"
         # create a new Firefox session
         # options = Options()
@@ -41,7 +42,7 @@ for starting_href in df["href"]:
         
         while len(driver.find_elements_by_id("ContentPlaceHolder1_btnSubmit")) == 1:
             sys.stdout.write(f"\r {captchas_successful}/{captchas_solved}, Time:{time.time() - start_time}")
-            # Ispod je deo vezan za captchu ovo sa fajlom je da bi ja mogau ručno da je rešim...
+
             captcha_img = driver.find_element_by_xpath(
                 "//div[3]/div[1]/table/tbody/tr[3]/td/div/span[1]/img"
             ).get_attribute("src")
@@ -99,14 +100,12 @@ for starting_href in df["href"]:
 
         for href in urls:
             driver.get(href)
-            strainer = SoupStrainer("form")
-            soup = BeautifulSoup(driver.page_source, "html.parser", parse_only=strainer)
+            # strainer = SoupStrainer("form")
+            # print(href)
+            soup = BeautifulSoup(driver.page_source, "html.parser")
             data.update(getAllData(soup))
-    break
+    with open("data/" + katOp + ".json", "w") as outfile:
+        json.dump(data, outfile)
 
 
 driver.quit()
-
-
-with open("test.json", "w") as outfile:
-    json.dump(data, outfile)

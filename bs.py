@@ -451,11 +451,17 @@ def getAllData(soup):
             }
         )
 
-    if soup.find("td", text=re.compile(".*В2.*"), attrs={"class": "print_form_item_h"}):
+    if soup.find("td", text=re.compile(".*В2.*"), attrs={"class": "print_form_item_h"}): 
         id += (
             "_"
             + soup.find(
                 "span", {"id": "propObjekatDeo_ucLabelPermitionBrojStana_lblText"}
+            ).get_text()
+        )
+        id += (
+            "_"
+            + soup.find(
+                "span", {"id": "propObjekatDeo_ucLabelPermitionEvidBroj_lblText"}
             ).get_text()
         )
         nepoktetnost.update(
