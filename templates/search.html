@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Katastar</title>
+    <style>
+        .of {
+            overflow: scroll;
+            height: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <div class="container"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="container mt-5">
+                <div class="card">
+                    <h5 class="card-header">Унесите термине претраге:</h5>
+                    <div class="card-body">
+                        <form action="{{ url_for('search') }}" method="post" class="form-inline">
+                            <div class="form-group">
+                                <label for="naziv">Назив: </label>
+                                <input type="text" class="form-control mx-sm-3" name="naziv">
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary">Претрага</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="card">
+                <h5 class="card-header text-center">Парцеле</h5>
+                <div class="card-body of">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Назив имаоца</th>
+                                <th scope="col">Општина</th>
+                                <th scope="col">Катастарска општина</th>
+                                <th scope="col">Улица</th>
+                                <th scope="col">Бр. парцеле</th>
+                                <th scope="col">Бр. листа непокретносит</th>
+                                <th scope="col">Врста земљишта</th>
+                                <th scope="col">Култура</th>
+                                <th scope="col">Врста терета</th>
+                                <th scope="col">Датум уписа</th>
+                                <th scope="col">Датум престанка</th>
+                                <th scope="col">Опис забележбе</th>
+                                <th scope="col">Датум забележбе</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for parcela in parcele %}
+                            <tr>
+                                {% for p in parcela %}
+                                {% if p != None %}
+                                <th>{{ p }}</th>
+                                {% else %}
+                                <th></th>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="card">
+                <h5 class="card-header text-center">Објекти</h5>
+                <div class="card-body of">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Назив имаоца</th>
+                                <th scope="col">Општина</th>
+                                <th scope="col">Катастарска општина</th>
+                                <th scope="col">Улица</th>
+                                <th scope="col">Бр. парцеле</th>
+                                <th scope="col">Бр. листа непокретносит</th>
+                                <th scope="col">Врста земљишта</th>
+                                <th scope="col">Култура</th>
+                                <th scope="col">Начин коришћења</th>
+                                <th scope="col">Правни статус</th>
+                                <th scope="col">Врста терета</th>
+                                <th scope="col">Датум уписа</th>
+                                <th scope="col">Датум престанка</th>
+                                <th scope="col">Опис забележбе</th>
+                                <th scope="col">Датум забележбе</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for objekat in objekati %}
+                            <tr>
+                                {% for o in objekat %}
+                                {% if o != None %}
+                                <th>{{ o }}</th>
+                                {% else %}
+                                <th></th>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="card">
+                <h5 class="card-header text-center">Делови објеката</h5>
+                <div class="card-body of">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Назив имаоца</th>
+                                <th scope="col">Општина</th>
+                                <th scope="col">Катастарска општина</th>
+                                <th scope="col">Улица</th>
+                                <th scope="col">Бр. парцеле</th>
+                                <th scope="col">Бр. листа непокретносит</th>
+                                <th scope="col">Врста земљишта</th>
+                                <th scope="col">Култура</th>
+                                <th scope="col">Начин коришћења</th>
+                                <th scope="col">Правни статус</th>
+                                <th scope="col">Начин коришћења</th>
+                                <th scope="col">Опис објекта</th>
+                                <th scope="col">Врста терета</th>
+                                <th scope="col">Датум уписа</th>
+                                <th scope="col">Датум престанка</th>
+                                <th scope="col">Опис забележбе</th>
+                                <th scope="col">Датум забележбе</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for deo in delovi_objekata %}
+                            <tr>
+                                {% for o in deo %}
+                                {% if o != None %}
+                                <th>{{ o }}</th>
+                                {% else %}
+                                <th></th>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
