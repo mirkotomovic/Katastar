@@ -433,6 +433,7 @@ def getAllData(soup):
         "deoParcele": getPodatciDeluParcele(soup),
         "imaociParcele": getImaoceParcele(soup),
         "teretParcele": getTeretParcele(soup),
+        "zabelezbaParcele": getZabelezbaParcele(soup),
     }
 
     if soup.find("td", text=re.compile(".*В1.*"), attrs={"class": "print_form_item_h"}):
@@ -472,7 +473,7 @@ def getAllData(soup):
                 "zabelezbaPodObjekta": getZabelezbaPodObjekta(soup),
             }
         )
-
+    nepoktetnost.update({ 'id': id })
     return {id: nepoktetnost}
 
 
