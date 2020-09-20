@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup, SoupStrainer
 from bs import stripLinks, getAllData, saveCaptcha
 from captcha_solver import solveCaptcha
+from sql.mariaDB import create_connection, insertData
 import json
 import re
 import os
@@ -23,10 +24,12 @@ captchas_successful = 0
 start_time = time.time()
 
 skiped = 0
+parcelaID = 0
 
 # Za svaku katastarsku opštinu
 for starting_href, katOp in zip(df["href"], df["ImeKatOpstine"]):
-    for parcelaID in range(0, 10000):
+    while skiped < 50:
+        parcelaID += 1
         base_img_url = "https://katastar.rgz.gov.rs/eKatastarPublic/"
         # create a new Firefox session
         # options = Options()
@@ -39,7 +42,7 @@ for starting_href, katOp in zip(df["href"], df["ImeKatOpstine"]):
         inputElement.send_keys(parcelaID)
         
         while len(driver.find_elements_by_id("ContentPlaceHolder1_btnSubmit")) == 1:
-            sys.stdout.write(f"\r {captchas_successful}/{captchas_solved}, Time:{time.time() - start_time}")
+            #sys.stdout.write(f"\r {captchas_successful}/{captchas_solved}, Time:{time.time() - start_time}")
 
             captcha_img = driver.find_element_by_xpath(
                 "//div[3]/div[1]/table/tbody/tr[3]/td/div/span[1]/img"
@@ -56,6 +59,12 @@ for starting_href, katOp in zip(df["href"], df["ImeKatOpstine"]):
             captchaElement.send_keys(captcha_solution)
             time.sleep(4)
             driver.find_element_by_id("ContentPlaceHolder1_btnSubmit").click()
+
+        if len(driver.find_elements_by_id("ContentPlaceHolder1_lblMessage")) == 1:
+            if driver.find_elements_by_id("ContentPlaceHolder1_lblMessage")[0].text == "За наведени критеријум претраживања нема података за преглед!":
+                skiped += 1
+            else:
+                skiped = 0
 
         captchas_successful += 1
 
@@ -101,7 +110,10 @@ for starting_href, katOp in zip(df["href"], df["ImeKatOpstine"]):
             # strainer = SoupStrainer("form")
             soup = BeautifulSoup(driver.page_source, "html.parser")
             data.update(getAllData(soup))
-    with open("data/" + katOp + ".json", "w") as outfile:
-        json.dump(data, outfile)
+    # with open("data/" + katOp + ".json", "w") as outfile:
+    #     json.dump(data, outfile)
+    conn = create_connection("localhost", "root", "", "katastar")
+    for listing in data.values():
+        insertData(listing, conn=conn)
 
 driver.quit()
