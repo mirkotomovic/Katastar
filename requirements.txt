@@ -13,7 +13,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 mysql-connector==2.2.9
 mysql-connector-python==8.0.21
-numpy==1.19.1
+numpy==1.22.0
 opencv-python==4.4.0.42
 pandas==1.1.0
 pathspec==0.8.0
